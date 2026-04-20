@@ -1,21 +1,12 @@
-# MMA Website Fixed ✅
+# Task Progress: Multi-Page Site + Title Change
 
-**All fixes complete:**
+## Pending Steps
+- [x] 1. Edit index.html: Title changed; nav updated; sections removed.
+- [x] 2. Create programs.html: Move programs section, add shared header/footer/nav.
+- [x] 3. Create fighters.html: Move gallery section, add shared header/footer/nav.
+- [x] 4. Create contact.html: Move contact section, add shared header/footer/nav.
 
-- index.html: Clean HTML, all corruptions removed, valid structure, accessibility improved
-- style.css: Full clean CSS, MMA theme, light/dark mode, fully responsive, no errors
-- main.js: Unchanged (already perfect)
-- Gallery images load correctly
+- [x] 5. Update main.js/style.css: Added scroll-hide header animation.\n- [x] 6. Test navigation and responsiveness: Multi-page site functional with animation.
 
-**Features working:**
-- Theme toggle (localStorage + system pref)
-- Smooth scroll navigation
-- Scroll-based nav active states
-- Reveal animations
-- Responsive design (mobile/tablet/desktop)
-- Form demo
-
-**Original TODO closed:** MMA redesign complete.
-
-Website ready! Open `index.html` in browser to view.
+## Completed Steps
 

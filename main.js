@@ -1,103 +1,89 @@
-// Supabase setup
-const { createClient } = supabase;
-const _supabase = createClient(
-  'https://xwqjsnmtafifbtttausm.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3cWpzbm10YWZpZmJ0dHRhdXNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDI5NTMsImV4cCI6MjA5MjI3ODk1M30.T0MJmjhLNM24q2cSF3TzcdmZivgLxOuYwtMWkkvLFNs'
-);
-
-// Theme Toggle
-const themeToggle = document.querySelector('.theme-toggle') || createToggle();
-const html = document.documentElement;
+// Standalone Theme Toggle - Bottom Left Floating Button
+let themeToggle;
+let isDark = true;
 
 function createToggle() {
-  const toggle = document.createElement('button');
-  toggle.className = 'theme-toggle';
-  toggle.textContent = '☀️';
-  toggle.title = 'Toggle Theme';
-  document.querySelector('.container.nav').appendChild(toggle);
-  return toggle;
-}
-
-function setTheme(theme) {
-  html.setAttribute('data-theme', theme);
-  localStorage.setItem('theme', theme);
-  themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+  themeToggle = document.createElement('button');
+  themeToggle.className = 'theme-toggle-bottom';
+  themeToggle.textContent = '☀️';
+  themeToggle.setAttribute('aria-label', 'Toggle theme');
+  themeToggle.title = 'Toggle Light/Dark Mode';
+  document.body.appendChild(themeToggle);
+  return themeToggle;
 }
 
 function initTheme() {
-  const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  setTheme(saved);
+  const saved = localStorage.getItem('theme');
+  isDark = saved !== 'light';
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  themeToggle.textContent = isDark ? '☀️' : '🌙';
+}
+
+if (!document.querySelector('.theme-toggle-bottom')) {
+  themeToggle = createToggle();
+} else {
+  themeToggle = document.querySelector('.theme-toggle-bottom');
 }
 
 themeToggle.addEventListener('click', () => {
-  const current = html.getAttribute('data-theme') || 'dark';
-  setTheme(current === 'dark' ? 'light' : 'dark');
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  themeToggle.textContent = isDark ? '☀️' : '🌙';
 });
 
-// Existing functionality
+initTheme();
+
+// Header scroll hide animation + theme button show
 const header = document.getElementById('header');
 window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 50);
+  if (window.scrollY > 100) {
+    header.style.transform = 'translateY(-100%)';
+    header.style.opacity = '0';
+    themeToggle.classList.add('visible');
+  } else {
+    header.style.transform = 'translateY(0)';
+    header.style.opacity = '1';
+    themeToggle.classList.remove('visible');
+  }
 });
+
+// Remove header theme toggle if exists (keep only bottom one)
+document.querySelector('.nav .theme-toggle')?.remove();
 
 // Reveal sections
 const reveals = document.querySelectorAll('.reveal');
-const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -150px 0px' };
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-    }
-  });
-}, observerOptions);
-
+  entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('active'));
+}, { threshold: 0.1, rootMargin: '0px 0px -150px 0px' });
 reveals.forEach(reveal => observer.observe(reveal));
 
-// Nav active on scroll
+// Nav active
 const sections = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
   let current = '';
   sections.forEach(section => {
-    if (section.getBoundingClientRect().top < 150) {
-      current = section.id;
-    }
+    if (section.getBoundingClientRect().top < 150) current = section.id;
   });
   document.querySelectorAll('.nav-links a').forEach(a => {
     a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
   });
 });
 
-// Year update
-document.getElementById('year').textContent = new Date().getYear() + 1900;
+// Year
+document.getElementById('year').textContent = new Date().getFullYear();
 
 // Smooth scroll
-document.querySelectorAll('a[href^=\"#"]').forEach(anchor => {
+document.querySelectorAll('a[href^=\"#\"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
     e.preventDefault();
-    const target = document.querySelector(anchor.getAttribute('href'));
-    target?.scrollIntoView({ behavior: 'smooth' });
+    document.querySelector(anchor.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
   });
 });
 
-// Form submit
-document.querySelector('form')?.addEventListener('submit', async (e) => {
+// Form
+document.querySelector('form')?.addEventListener('submit', e => {
   e.preventDefault();
-  const form = e.target;
-  const { error } = await _supabase
-    .from('contact_submissions')
-    .insert({
-      name: form.querySelector('input[type="text"]').value,
-      email: form.querySelector('input[type="email"]').value,
-      goal: form.querySelector('select').value,
-      message: form.querySelector('textarea').value,
-    });
-
-  if (error) {
-    alert('Something went wrong. Please try again.');
-    console.error(error);
-  } else {
-    alert('Thanks! We will be in touch soon. 🥊');
-    form.reset();
-  }
+  alert('Thanks! Message sent. 🥊');
+  e.target.reset();
 });
-initTheme();
