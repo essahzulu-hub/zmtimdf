@@ -34,22 +34,32 @@ themeToggle.addEventListener('click', () => {
 
 initTheme();
 
-// Header scroll hide animation + theme button show
+// Header scroll hide animation (3 dash hamburger)
 const header = document.getElementById('header');
+let lastScroll = 0;
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 100) {
-    header.style.transform = 'translateY(-100%)';
-    header.style.opacity = '0';
+  const currentScroll = window.scrollY;
+  
+  if (currentScroll > 100) {
+    header.classList.add('hidden');
     themeToggle.classList.add('visible');
   } else {
-    header.style.transform = 'translateY(0)';
-    header.style.opacity = '1';
+    header.classList.remove('hidden');
     themeToggle.classList.remove('visible');
   }
+  
+  lastScroll = currentScroll;
 });
 
-// Remove header theme toggle if exists (keep only bottom one)
-document.querySelector('.nav .theme-toggle')?.remove();
+// Mobile hamburger menu
+const hamburger = document.querySelector('.hamburger');
+if (hamburger) {
+  hamburger.addEventListener('click', () => {
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.classList.toggle('active');
+    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+  });
+}
 
 // Reveal sections
 const reveals = document.querySelectorAll('.reveal');
@@ -87,3 +97,4 @@ document.querySelector('form')?.addEventListener('submit', e => {
   alert('Thanks! Message sent. 🥊');
   e.target.reset();
 });
+
