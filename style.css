@@ -53,13 +53,15 @@ h1, h2, h3 {
   padding: 0 1rem;
 }
 
+
+
 section {
-  padding: 80px 0;
+  padding: 120px 0 80px;
 }
 
 header {
   position: fixed;
-  top: 0;
+  top: 90px;
   left: 0;
   width: 100%;
   z-index: 1000;
@@ -67,9 +69,10 @@ header {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease;
-  padding: 0.25rem 0;
+  padding: 1rem 0;
   border-bottom: 1px solid var(--card-border);
-  height: 60px;
+  height: 80px;
+  border-top: 1px solid var(--card-border);
 }
 
 header.hidden {
@@ -128,8 +131,8 @@ header .nav {
 .logo-img {
   width: 40px;
   height: 40px;
-  object-fit: contain;
-  border-radius: 8px;
+  object-fit: cover;
+  border-radius: 50%;
   box-shadow: var(--shadow);
 }
 
@@ -250,7 +253,7 @@ header .nav {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  z-index: 999;
+  z-index: 998;
   box-shadow: var(--shadow);
   transform: translateY(100px);
   animation: slideUp 0.5s ease-out 0.5s forwards;
@@ -306,7 +309,7 @@ header .nav {
   background-size: cover;
   background-position: center;
   background-blend-mode: overlay;
-  padding-top: 60px;
+  padding-top: 180px;
 }
 
 .hero::before {
@@ -512,59 +515,21 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
+  .logo-badge {
+    width: 60px;
+    height: 60px;
+    top: 10px;
   }
   header {
-    height: 55px;
-    padding: 0.25rem 0;
-  }
-  header .nav {
-    height: 100%;
-    gap: 0.5rem;
-  }
-  .logo-img {
-    width: 35px;
-    height: 35px;
-  }
-  .logo-text {
-    font-size: 1.1rem;
-  }
-  .nav-links {
-    gap: 1rem;
-  }
-  .nav-links a {
-    font-size: 0.85rem;
-    padding: 0.25rem 0;
-  }
-  .btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.8rem;
+    top: 80px;
+    height: 70px;
+    padding: 0.5rem 0;
   }
   .hero {
-    padding-top: 55px;
+    padding-top: 150px;
   }
-  .theme-toggle-bottom {
-    bottom: 1rem;
-    left: 1rem;
-    width: 42px;
-    height: 42px;
-    font-size: 1rem;
-  }
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .contact-wrap {
-    grid-template-columns: 1fr;
-  }
-  .hamburger {
-    display: flex;
-  }
-}
-
-@media (max-width: 480px) {
-  .nav-links {
-    display: none;
+  section {
+    padding: 100px 0 80px;
   }
 }
 

@@ -34,7 +34,7 @@ themeToggle.addEventListener('click', () => {
 
 initTheme();
 
-// Header scroll hide animation (3 dash hamburger)
+// Header scroll hide animation
 const header = document.getElementById('header');
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
@@ -51,13 +51,36 @@ window.addEventListener('scroll', () => {
   lastScroll = currentScroll;
 });
 
-// Mobile hamburger menu
+// Mobile hamburger dropdown menu
 const hamburger = document.querySelector('.hamburger');
 if (hamburger) {
   hamburger.addEventListener('click', () => {
-    const navLinks = document.querySelector('.nav-links');
     hamburger.classList.toggle('active');
-    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    
+    const mobileMenu = document.querySelector('.mobile-menu') || document.createElement('ul');
+    if (!mobileMenu.classList.contains('mobile-menu')) {
+      mobileMenu.className = 'mobile-menu';
+      mobileMenu.innerHTML = `
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="fighters.html">Fighters</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      `;
+      const navLinks = document.querySelector('.nav-links');
+      navLinks.appendChild(mobileMenu);
+    }
+    
+    mobileMenu.classList.toggle('active');
+    
+    // Close on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        setTimeout(() => mobileMenu.remove(), 300);
+      });
+    });
   });
 }
 
