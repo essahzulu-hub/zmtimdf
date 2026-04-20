@@ -1,3 +1,10 @@
+// Supabase setup
+const { createClient } = supabase;
+const _supabase = createClient(
+  'https://xwqjsnmtafifbtttausm.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3cWpzbm10YWZpZmJ0dHRhdXNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDI5NTMsImV4cCI6MjA5MjI3ODk1M30.T0MJmjhLNM24q2cSF3TzcdmZivgLxOuYwtMWkkvLFNs'
+);
+
 // Theme Toggle
 const themeToggle = document.querySelector('.theme-toggle') || createToggle();
 const html = document.documentElement;
@@ -72,10 +79,25 @@ document.querySelectorAll('a[href^=\"#"]').forEach(anchor => {
   });
 });
 
-// Form submit (placeholder)
-document.querySelector('form')?.addEventListener('submit', e => {
+// Form submit
+document.querySelector('form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  alert('Thanks! Message sent. (Demo)');
-});
+  const form = e.target;
+  const { error } = await _supabase
+    .from('contact_submissions')
+    .insert({
+      name: form.querySelector('input[type="text"]').value,
+      email: form.querySelector('input[type="email"]').value,
+      goal: form.querySelector('select').value,
+      message: form.querySelector('textarea').value,
+    });
 
+  if (error) {
+    alert('Something went wrong. Please try again.');
+    console.error(error);
+  } else {
+    alert('Thanks! We will be in touch soon. 🥊');
+    form.reset();
+  }
+});
 initTheme();
