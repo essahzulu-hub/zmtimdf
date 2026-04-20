@@ -144,10 +144,16 @@ header .nav {
 }
 
 .nav-links {
-  display: flex;
+  display: none;
   list-style: none;
   gap: 1.5rem;
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
 }
 
 .nav-links a {
